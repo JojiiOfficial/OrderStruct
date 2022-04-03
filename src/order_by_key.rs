@@ -1,36 +1,36 @@
 use std::{cmp::Ordering, marker::PhantomData};
 
-/// A struct to order values by a custom key function
-pub struct OrderByKey<T, U, K: Ord> {
-    val: T,
-    key_fn: U,
-    pd: PhantomData<K>,
+/// A struct to order values by a custom key function `F`
+pub struct OrderByKey<V, F, O: Ord> {
+    val: V,
+    key_fn: F,
+    pd: PhantomData<O>,
 }
 
-impl<T, U, K: Ord> OrderByKey<T, U, K>
+impl<V, F, O: Ord> OrderByKey<V, F, O>
 where
-    U: Fn(&T) -> K,
+    F: Fn(&V) -> O,
 {
     /// Create a new OrderBy
     #[inline]
-    pub fn new(val: T, cmp_fn: U) -> Self {
+    pub fn new(val: V, key_fn: F) -> Self {
         Self {
             val,
-            key_fn: cmp_fn,
+            key_fn,
             pd: PhantomData,
         }
     }
 
-    /// Convert back into `T`
+    /// Convert back into `V`
     #[inline]
-    pub fn into_inner(self) -> T {
+    pub fn into_inner(self) -> V {
         self.val
     }
 }
 
-impl<T, U, K: Ord> PartialEq for OrderByKey<T, U, K>
+impl<V, F, O: Ord> PartialEq for OrderByKey<V, F, O>
 where
-    U: Fn(&T) -> K,
+    F: Fn(&V) -> O,
 {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
@@ -40,16 +40,16 @@ where
     }
 }
 
-impl<T, U, K: Ord> Eq for OrderByKey<T, U, K>
+impl<V, F, O: Ord> Eq for OrderByKey<V, F, O>
 where
-    U: Fn(&T) -> K,
+    F: Fn(&V) -> O,
 {
     fn assert_receiver_is_total_eq(&self) {}
 }
 
-impl<T, U, K: Ord> PartialOrd for OrderByKey<T, U, K>
+impl<V, F, O: Ord> PartialOrd for OrderByKey<V, F, O>
 where
-    U: Fn(&T) -> K,
+    F: Fn(&V) -> O,
 {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
@@ -59,9 +59,9 @@ where
     }
 }
 
-impl<T, U, K: Ord> Ord for OrderByKey<T, U, K>
+impl<V, F, O: Ord> Ord for OrderByKey<V, F, O>
 where
-    U: Fn(&T) -> K,
+    F: Fn(&V) -> O,
 {
     #[inline]
     fn cmp(&self, other: &Self) -> Ordering {

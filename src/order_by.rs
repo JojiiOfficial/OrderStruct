@@ -1,31 +1,31 @@
 use std::cmp::Ordering;
 
-/// A struct to order values by a custom function
-pub struct OrderBy<T, U> {
-    val: T,
-    cmp_fn: U,
+/// A struct to order values by a custom function `F`
+pub struct OrderBy<V, F> {
+    val: V,
+    cmp_fn: F,
 }
 
-impl<T, U> OrderBy<T, U>
+impl<V, F> OrderBy<V, F>
 where
-    U: Fn(&T, &T) -> Ordering,
+    F: Fn(&V, &V) -> Ordering,
 {
     /// Create a new OrderBy
     #[inline]
-    pub fn new(val: T, cmp_fn: U) -> Self {
+    pub fn new(val: V, cmp_fn: F) -> Self {
         Self { val, cmp_fn }
     }
 
-    /// Convert back into `T`
+    /// Convert back into `V`
     #[inline]
-    pub fn into_inner(self) -> T {
+    pub fn into_inner(self) -> V {
         self.val
     }
 }
 
-impl<T, U> PartialEq for OrderBy<T, U>
+impl<V, F> PartialEq for OrderBy<V, F>
 where
-    U: Fn(&T, &T) -> Ordering,
+    F: Fn(&V, &V) -> Ordering,
 {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
@@ -35,9 +35,9 @@ where
     }
 }
 
-impl<T, U> PartialOrd for OrderBy<T, U>
+impl<V, F> PartialOrd for OrderBy<V, F>
 where
-    U: Fn(&T, &T) -> Ordering,
+    F: Fn(&V, &V) -> Ordering,
 {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
@@ -45,16 +45,16 @@ where
     }
 }
 
-impl<T, U> Eq for OrderBy<T, U>
+impl<V, F> Eq for OrderBy<V, F>
 where
-    U: Fn(&T, &T) -> Ordering,
+    F: Fn(&V, &V) -> Ordering,
 {
     fn assert_receiver_is_total_eq(&self) {}
 }
 
-impl<T, U> Ord for OrderBy<T, U>
+impl<V, F> Ord for OrderBy<V, F>
 where
-    U: Fn(&T, &T) -> Ordering,
+    F: Fn(&V, &V) -> Ordering,
 {
     #[inline]
     fn cmp(&self, other: &Self) -> Ordering {

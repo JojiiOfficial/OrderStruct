@@ -1,16 +1,15 @@
 use std::cmp::Ordering;
 
-/// Custom struct to be able to compare items wich don't necessarily implement `Ord` themselves or are required
-/// to be sorted by an u32 instead of the `Ord` implementation
-pub struct OrderVal<T> {
-    ord: u32,
+/// Custom struct to be able to compare items using another types `Ord` implementation
+pub struct OrderVal<T, O: Ord> {
+    ord: O,
     val: T,
 }
 
-impl<T: PartialEq + Eq> OrderVal<T> {
+impl<T, O: Ord> OrderVal<T, O> {
     /// Create a new OrderVal
     #[inline]
-    pub fn new(val: T, ord: u32) -> Self {
+    pub fn new(val: T, ord: O) -> Self {
         Self { ord, val }
     }
 
@@ -22,29 +21,30 @@ impl<T: PartialEq + Eq> OrderVal<T> {
 
     /// Get assigned score
     #[inline]
-    pub fn ord(&self) -> u32 {
-        self.ord
+    pub fn ord(&self) -> &O {
+        &self.ord
     }
 }
 
-impl<T> PartialOrd for OrderVal<T> {
+impl<T, O: Ord> PartialOrd for OrderVal<T, O> {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         Some(self.ord.cmp(&other.ord))
     }
 }
 
-impl<T> Ord for OrderVal<T> {
+impl<T, O: Ord> Ord for OrderVal<T, O> {
     #[inline]
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         self.ord.cmp(&other.ord)
     }
 }
 
-impl<T> PartialEq for OrderVal<T> {
+impl<T, O: Ord> PartialEq for OrderVal<T, O> {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
         self.ord.cmp(&other.ord) == Ordering::Equal
     }
 }
-impl<T> Eq for OrderVal<T> {}
+
+impl<T, O: Ord> Eq for OrderVal<T, O> {}
