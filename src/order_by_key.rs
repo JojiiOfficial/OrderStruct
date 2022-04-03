@@ -68,3 +68,19 @@ where
         self.partial_cmp(&other).unwrap()
     }
 }
+
+impl<V: Clone, F, O: Ord + Clone> Clone for OrderByKey<V, F, O>
+where
+    F: Fn(&V) -> O + Clone,
+{
+    #[inline]
+    fn clone(&self) -> Self {
+        Self {
+            val: self.val.clone(),
+            pd: self.pd.clone(),
+            key_fn: self.key_fn.clone(),
+        }
+    }
+}
+
+impl<V: Copy, F, O: Ord + Copy> Copy for OrderByKey<V, F, O> where F: Fn(&V) -> O + Copy {}

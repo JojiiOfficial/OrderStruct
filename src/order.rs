@@ -48,3 +48,15 @@ impl<T, O: Ord> PartialEq for OrderVal<T, O> {
 }
 
 impl<T, O: Ord> Eq for OrderVal<T, O> {}
+
+impl<T: Clone, O: Ord + Clone> Clone for OrderVal<T, O> {
+    #[inline]
+    fn clone(&self) -> Self {
+        Self {
+            ord: self.ord.clone(),
+            val: self.val.clone(),
+        }
+    }
+}
+
+impl<T: Copy, O: Ord + Copy> Copy for OrderVal<T, O> {}

@@ -61,3 +61,18 @@ where
         self.partial_cmp(&other).unwrap()
     }
 }
+
+impl<V: Clone, F> Clone for OrderBy<V, F>
+where
+    F: Fn(&V, &V) -> Ordering + Clone,
+{
+    #[inline]
+    fn clone(&self) -> Self {
+        Self {
+            val: self.val.clone(),
+            cmp_fn: self.cmp_fn.clone(),
+        }
+    }
+}
+
+impl<V: Copy, F> Copy for OrderBy<V, F> where F: Fn(&V, &V) -> Ordering + Copy {}
