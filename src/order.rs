@@ -1,6 +1,7 @@
 use std::{
     borrow::Borrow,
     cmp::Ordering,
+    hash::Hash,
     ops::{AddAssign, DivAssign, MulAssign, SubAssign},
 };
 
@@ -44,14 +45,14 @@ impl<T, O: Ord> OrderVal<T, O> {
 
 impl<T, O: Ord> PartialOrd for OrderVal<T, O> {
     #[inline]
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.ord.cmp(&other.ord))
     }
 }
 
 impl<T, O: Ord> Ord for OrderVal<T, O> {
     #[inline]
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+    fn cmp(&self, other: &Self) -> Ordering {
         self.ord.cmp(&other.ord)
     }
 }
@@ -116,5 +117,13 @@ impl<T, O: Ord + MulAssign<O>> MulAssign<O> for OrderVal<T, O> {
     #[inline]
     fn mul_assign(&mut self, rhs: O) {
         self.ord.mul_assign(rhs)
+    }
+}
+
+impl<T: Hash, O: Hash + Ord> Hash for OrderVal<T, O> {
+    #[inline]
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.val.hash(state);
+        self.ord.hash(state);
     }
 }
