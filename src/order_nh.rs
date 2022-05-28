@@ -6,7 +6,7 @@ use std::{
 };
 
 /// Custom struct to be able to compare items using another types `Ord` implementation
-/// This implements Hash if T implements hash
+/// This implements Hash if T implements hash and only uses T for hashing
 pub struct OrderVal<T, O: Ord> {
     ord: O,
     val: T,
@@ -125,6 +125,5 @@ impl<T: Hash, O: Hash + Ord> Hash for OrderVal<T, O> {
     #[inline]
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         self.val.hash(state);
-        self.ord.hash(state);
     }
 }

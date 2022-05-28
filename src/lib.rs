@@ -1,6 +1,7 @@
 pub mod order;
 pub mod order_by;
 pub mod order_by_key;
+pub mod order_nh;
 
 pub use order::OrderVal;
 pub use order_by::OrderBy;
