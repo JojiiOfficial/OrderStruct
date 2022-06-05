@@ -44,28 +44,28 @@ impl<T, O: Ord> OrderVal<T, O> {
     }
 }
 
-impl<T, O: Ord> PartialOrd for OrderVal<T, O> {
+impl<T: PartialEq, O: Ord> PartialOrd for OrderVal<T, O> {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.ord.cmp(&other.ord))
     }
 }
 
-impl<T, O: Ord> Ord for OrderVal<T, O> {
+impl<T: PartialEq, O: Ord> Ord for OrderVal<T, O> {
     #[inline]
     fn cmp(&self, other: &Self) -> Ordering {
         self.ord.cmp(&other.ord)
     }
 }
 
-impl<T, O: Ord> PartialEq for OrderVal<T, O> {
+impl<T: PartialEq, O: Ord> PartialEq for OrderVal<T, O> {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
-        self.ord.cmp(&other.ord) == Ordering::Equal
+        self.inner() == other.inner()
     }
 }
 
-impl<T, O: Ord> Eq for OrderVal<T, O> {}
+impl<T: PartialEq, O: Ord> Eq for OrderVal<T, O> {}
 
 impl<T: Clone, O: Ord + Clone> Clone for OrderVal<T, O> {
     #[inline]
