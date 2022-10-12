@@ -1,6 +1,7 @@
 use std::cmp::Ordering;
 
 /// A struct to order values by a custom function `F`
+#[derive(Debug)]
 pub struct OrderBy<V, F> {
     val: V,
     cmp_fn: F,

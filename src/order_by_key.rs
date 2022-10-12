@@ -1,6 +1,7 @@
 use std::{cmp::Ordering, marker::PhantomData};
 
 /// A struct to order values by a custom key function `F`
+#[derive(Debug)]
 pub struct OrderByKey<V, F, O: Ord> {
     val: V,
     key_fn: F,
