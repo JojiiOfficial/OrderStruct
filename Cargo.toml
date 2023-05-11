@@ -2,6 +2,8 @@
 name = "order_struct"
 version = "0.1.0"
 edition = "2021"
+description = "Qol rust crate for custom ordering of types that already implement Ord types you can't implement it yourself"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
